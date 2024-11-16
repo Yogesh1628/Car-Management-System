@@ -5,15 +5,20 @@ import {
   signInStart,
   signInSuccess,
   signInFailure,
-  setError,
 } from "../redux/user/userSlice";
 import OAuth from "../components/OAuth";
 
 export default function SignIn() {
   const [formData, setFormData] = useState({});
-  const { loading, error } = useSelector((state) => state.user);
+  const [localError, setLocalError] = useState(null);  // Local error state
+  const { loading } = useSelector((state) => state.user);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    // Reset the error to null whenever the component is mounted
+    setLocalError(null);
+  }, []);
 
   const handleChange = (e) => {
     setFormData({
@@ -21,7 +26,6 @@ export default function SignIn() {
       [e.target.id]: e.target.value,
     });
   };
-
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -37,20 +41,23 @@ export default function SignIn() {
       const data = await res.json();
       console.log(data);
       if (data.success === false) {
+        setLocalError(data.message); // Set the local error state
         dispatch(signInFailure(data.message));
         return;
       }
       dispatch(signInSuccess(data));
       navigate("/");
     } catch (error) {
+      setLocalError(error.message); // Set the local error state
       dispatch(signInFailure(error.message));
     }
   };
+
   return (
     <div className="p-3 max-w-lg mx-auto">
       <h1 className="text-3xl text-center font-semibold my-7">Sign In</h1>
       <div className="pb-2 text-center text-gray-600">
-        Tesing Email : jk9815742@gmail.com and Password : jatin2001
+        Testing Email : jk9815742@gmail.com and Password : jatin2001
       </div>
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <input
@@ -77,11 +84,12 @@ export default function SignIn() {
         <OAuth />
       </form>
       <div className="flex gap-2 mt-5">
-        <p>Dont have an account?</p>
+        <p>Don't have an account?</p>
         <Link to={"/sign-up"}>
           <span className="text-blue-700">Sign up</span>
         </Link>
       </div>
+      {localError && <p className="text-red-500 mt-5">{localError}</p>} {/* Display local error */}
     </div>
   );
 }

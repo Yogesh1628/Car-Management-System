@@ -13,6 +13,13 @@ export default function SignUp() {
       [e.target.id]: e.target.value,
     });
   };
+
+  function successful()
+  {
+    alert("User Created Successfully ! Please login with your details ");
+    navigate('/sign-in');
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -33,7 +40,8 @@ export default function SignUp() {
       }
       setLoading(false);
       setError(null);
-      navigate('/sign-in');
+      
+      successful();
     } catch (error) {
       setLoading(false);
       setError(error.message);
