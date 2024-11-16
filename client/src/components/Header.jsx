@@ -59,11 +59,15 @@ export default function Header() {
               Home
             </li>
           </Link>
-          <Link to="/about">
+          <a
+            href="https://documenter.getpostman.com/view/31563269/2sAYBPkuFc"
+            target="_blank" // Opens in a new tab
+            rel="noopener noreferrer" // For security reasons when opening in a new tab
+          >
             <li className="hidden sm:inline text-slate-700 hover:underline">
               About
             </li>
-          </Link>
+          </a>
           <Link to="/profile">
             {currentUser ? (
               <img
