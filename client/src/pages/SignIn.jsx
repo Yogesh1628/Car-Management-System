@@ -11,13 +11,14 @@ import OAuth from "../components/OAuth";
 export default function SignIn() {
   const [formData, setFormData] = useState({});
   const [localError, setLocalError] = useState(null);  // Local error state
-  const { loading } = useSelector((state) => state.user);
+  const [loading, setLoading] = useState(false); // Local loading state
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   useEffect(() => {
-    // Reset the error to null whenever the component is mounted
+    // Reset the error and set loading to false whenever the component is mounted
     setLocalError(null);
+    setLoading(false); // Set loading to false on every component mount
   }, []);
 
   const handleChange = (e) => {
@@ -30,6 +31,7 @@ export default function SignIn() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      setLoading(true); // Set loading to true when submitting
       dispatch(signInStart());
       const res = await fetch("/api/auth/signin", {
         method: "POST",
@@ -43,6 +45,7 @@ export default function SignIn() {
       if (data.success === false) {
         setLocalError(data.message); // Set the local error state
         dispatch(signInFailure(data.message));
+        setLoading(false); // Reset loading state
         return;
       }
       dispatch(signInSuccess(data));
@@ -50,6 +53,7 @@ export default function SignIn() {
     } catch (error) {
       setLocalError(error.message); // Set the local error state
       dispatch(signInFailure(error.message));
+      setLoading(false); // Reset loading state
     }
   };
 
