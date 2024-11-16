@@ -47,7 +47,7 @@ export default function Home() {
       {/* User Listings Section */}
       <div className="max-w-6xl mx-auto p-3 flex flex-col gap-8 my-10">
         {isLoading ? (
-          <p>Loading ...</p> // Show loading state
+          <p>Make Sure you have logged In !</p> // Show loading state
         ) : (
           <>
             {userListings && userListings.length > 0 ? (
